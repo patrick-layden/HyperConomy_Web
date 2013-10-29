@@ -1,0 +1,10 @@
+name: HyperConomy_Web
+main: regalowl.hyperconomy_web.HyperConomy_Web
+version: 0.0.1
+author: RegalOwl
+depend: [HyperConomy]
+commands:
+   hcweb:
+      description: Allows adjusting the web page from in-game.
+      permission: hyperconomy.admin
+      permission-message: You do not have permission.
