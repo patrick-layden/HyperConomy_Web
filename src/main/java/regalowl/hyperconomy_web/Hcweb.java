@@ -48,11 +48,7 @@ public class Hcweb implements CommandExecutor{
 				hcw.gYH().gFC("config").set("config.web-page.port", Integer.parseInt(args[1]));
 				sender.sendMessage(L.get("WEB_PAGE_SET"));
 				hcw.restart();
-			} else if (args[0].equalsIgnoreCase("economy")) {
-				hcw.gYH().gFC("config").set("config.web-page.web-page-economy", args[1]);
-				sender.sendMessage(L.get("WEB_PAGE_SET"));
-				hcw.restart();
-			} else if (args[0].equalsIgnoreCase("font")) {
+			} else if (args[0].equalsIgnoreCase("fontcolor")) {
 				hcw.gYH().gFC("config").set("config.web-page.font-color", args[1]);
 				sender.sendMessage(L.get("WEB_PAGE_SET"));
 				hcw.restart();
