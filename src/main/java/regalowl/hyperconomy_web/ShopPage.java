@@ -120,7 +120,7 @@ public class ShopPage extends HttpServlet {
 			page += "Stock\n";
 			page += "</TH>\n";
 			page += "<TH class='header'>\n";
-			page += "ID\n";
+			page += "Material\n";
 			page += "</TH>\n";
 
 			if (useHistory) {
@@ -207,13 +207,13 @@ public class ShopPage extends HttpServlet {
 				page += "</TD>\n";
 				page += "<TD>\n";
 
-				int id = -1;
+				String material = "N/A";
 				if (ho instanceof HyperItem) {
 					HyperItem hi = (HyperItem) ho;
-					id = hi.getId();
+					material = hi.getMaterial();
 				}
 
-				page += id + "\n";
+				page += material + "\n";
 				page += "</TD>\n";
 
 				if (useHistory) {
