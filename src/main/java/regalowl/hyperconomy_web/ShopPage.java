@@ -70,7 +70,7 @@ public class ShopPage extends HttpServlet {
 			if (ps != null) {
 				useHistory = false;
 			}
-			ArrayList<HyperObject> objects = s.getAvailableObjects();
+			ArrayList<HyperObject> objects = s.getTradeableObjects();
 			Collections.sort(objects);
 
 			HashMap<HyperObject, String> hour = null;
@@ -194,7 +194,7 @@ public class ShopPage extends HttpServlet {
 				}
 				page += "<TR>\n";
 				page += "<TD>\n";
-				page += ho.getName() + "\n";
+				page += ho.getDisplayName() + "\n";
 				page += "</TD>\n";
 				page += "<TD>\n";
 				page += sellString + "\n";

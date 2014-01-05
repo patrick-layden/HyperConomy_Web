@@ -41,7 +41,7 @@ public class WebHandler implements ShopCreationListener {
 					context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 					context.setContextPath("/");
 					server.setHandler(context);
-					// context.addServlet(new ServletHolder(new HyperWebAPI()), "/API/*");
+					//context.addServlet(new ServletHolder(new HyperWebAPI()), "/API/*");
 					context.addServlet(new ServletHolder(new MainPage()), "/");
 					for (Shop s : hc.getEconomyManager().getShops()) {
 						ShopPage sp = new ShopPage(s);
