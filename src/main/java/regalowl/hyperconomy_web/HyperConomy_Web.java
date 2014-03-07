@@ -39,7 +39,8 @@ public class HyperConomy_Web extends JavaPlugin implements DataLoadListener {
 	private int fontSize;
 	private int port;
 	
-	
+	private String webAPIPath;
+	private boolean useWebAPI;
 	private boolean enabled;
 	
 	@Override
@@ -69,6 +70,9 @@ public class HyperConomy_Web extends JavaPlugin implements DataLoadListener {
 		yh = db.getYamlHandler();
 		yh.copyFromJar("config");
 		yh.registerFileConfiguration("config");
+		yh.setCurrentFileConfiguration("config");
+		yh.registerDefault("enable-web-api", false);
+		yh.registerDefault("web-api-path", "API");
 	}
 
 
@@ -87,6 +91,8 @@ public class HyperConomy_Web extends JavaPlugin implements DataLoadListener {
 			font = config.getString("font");
 			fontSize = config.getInt("font-size");
 			port = config.getInt("port");
+			webAPIPath = config.getString("enable-web-api");
+			useWebAPI = config.getBoolean("web-api-path");
 			if (wh == null) {
 				wh = new WebHandler();
 			}
@@ -181,6 +187,14 @@ public class HyperConomy_Web extends JavaPlugin implements DataLoadListener {
 	
 	public int getPort() {
 		return port;
+	}
+	
+	public boolean useWebAPI() {
+		return useWebAPI;
+	}
+	
+	public String getWebAPIPath() {
+		return webAPIPath;
 	}
 
 }

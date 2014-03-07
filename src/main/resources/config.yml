@@ -9,3 +9,5 @@ header-color: "091926"
 table-data-color: 314A59
 font-size: 12
 font: verdana
+enable-web-api: false
+web-api-path: API
