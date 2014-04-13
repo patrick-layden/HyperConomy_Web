@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import regalowl.hyperconomy.HyperConomy;
-import regalowl.hyperconomy.LanguageFile;
+import regalowl.hyperconomy.util.LanguageFile;
 
 public class Hcweb implements CommandExecutor{
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

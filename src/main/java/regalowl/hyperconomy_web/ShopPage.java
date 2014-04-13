@@ -11,17 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import regalowl.databukkit.CommonFunctions;
-import regalowl.hyperconomy.EnchantmentClass;
-import regalowl.hyperconomy.History;
 import regalowl.hyperconomy.HyperConomy;
-import regalowl.hyperconomy.HyperEnchant;
-import regalowl.hyperconomy.HyperItem;
-import regalowl.hyperconomy.HyperObject;
-import regalowl.hyperconomy.HyperObjectStatus;
-import regalowl.hyperconomy.HyperXP;
-import regalowl.hyperconomy.PlayerShop;
-import regalowl.hyperconomy.PlayerShopObject;
-import regalowl.hyperconomy.Shop;
+import regalowl.hyperconomy.hyperobject.EnchantmentClass;
+import regalowl.hyperconomy.hyperobject.HyperObject;
+import regalowl.hyperconomy.hyperobject.HyperObjectStatus;
+import regalowl.hyperconomy.hyperobject.HyperObjectType;
+import regalowl.hyperconomy.shop.PlayerShop;
+import regalowl.hyperconomy.shop.Shop;
+import regalowl.hyperconomy.util.History;
+
 
 public class ShopPage extends HttpServlet {
 
@@ -143,11 +141,9 @@ public class ShopPage extends HttpServlet {
 			page += "</TR>\n";
 
 			for (HyperObject ho : objects) {
-				PlayerShopObject pso = null;
 				HyperObjectStatus hos = null;
-				if (ho instanceof PlayerShopObject) {
-					pso = (PlayerShopObject) ho;
-					hos = pso.getStatus();
+				if (ho.isShopObject()) {
+					hos = ho.getStatus();
 					if (hos == HyperObjectStatus.NONE) {
 						continue;
 					}
@@ -160,28 +156,25 @@ public class ShopPage extends HttpServlet {
 				double buyPrice = -1;
 				String buyString = "";
 				String sellString = "";
-				if (ho instanceof HyperItem) {
-					HyperItem hi = (HyperItem) ho;
-					sellPrice = hi.getValue(1);
-					sellPrice -= hi.getSalesTaxEstimate(sellPrice);
-					buyPrice = hi.getCost(1);
-					buyPrice += hi.getPurchaseTax(buyPrice);
+				if (ho.getType() == HyperObjectType.ITEM) {
+					sellPrice = ho.getSellPrice(1);
+					sellPrice -= ho.getSalesTaxEstimate(sellPrice);
+					buyPrice = ho.getBuyPrice(1);
+					buyPrice += ho.getPurchaseTax(buyPrice);
 					buyString = hc.getLanguageFile().fC(cf.twoDecimals(buyPrice));
 					sellString = hc.getLanguageFile().fC(cf.twoDecimals(sellPrice));
-				} else if (ho instanceof HyperEnchant) {
-					HyperEnchant he = (HyperEnchant) ho;
-					sellPrice = he.getValue(EnchantmentClass.DIAMOND);
-					sellPrice -= he.getSalesTaxEstimate(sellPrice);
-					buyPrice = he.getCost(EnchantmentClass.DIAMOND);
-					buyPrice += he.getPurchaseTax(buyPrice);
+				} else if (ho.getType() == HyperObjectType.ENCHANTMENT) {
+					sellPrice = ho.getSellPrice(EnchantmentClass.DIAMOND);
+					sellPrice -= ho.getSalesTaxEstimate(sellPrice);
+					buyPrice = ho.getBuyPrice(EnchantmentClass.DIAMOND);
+					buyPrice += ho.getPurchaseTax(buyPrice);
 					buyString = hc.getLanguageFile().fC(cf.twoDecimals(buyPrice));
 					sellString = hc.getLanguageFile().fC(cf.twoDecimals(sellPrice));
-				} else if (ho instanceof HyperXP) {
-					HyperXP xp = (HyperXP) ho;
-					sellPrice = xp.getValue(1);
-					sellPrice -= xp.getSalesTaxEstimate(sellPrice);
-					buyPrice = xp.getCost(1);
-					buyPrice += xp.getPurchaseTax(buyPrice);
+				} else if (ho.getType() == HyperObjectType.EXPERIENCE) {
+					sellPrice = ho.getSellPrice(1);
+					sellPrice -= ho.getSalesTaxEstimate(sellPrice);
+					buyPrice = ho.getBuyPrice(1);
+					buyPrice += ho.getPurchaseTax(buyPrice);
 					buyString = hc.getLanguageFile().fC(cf.twoDecimals(buyPrice));
 					sellString = hc.getLanguageFile().fC(cf.twoDecimals(sellPrice));
 				}
@@ -208,9 +201,8 @@ public class ShopPage extends HttpServlet {
 				page += "<TD>\n";
 
 				String material = "N/A";
-				if (ho instanceof HyperItem) {
-					HyperItem hi = (HyperItem) ho;
-					material = hi.getMaterial();
+				if (ho.getType() == HyperObjectType.ITEM) {
+					material = ho.getItemStack().getType().toString();
 				}
 
 				page += material + "\n";

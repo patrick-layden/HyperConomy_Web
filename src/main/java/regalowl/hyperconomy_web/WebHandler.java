@@ -10,13 +10,14 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import regalowl.hyperconomy.HyperConomy;
-import regalowl.hyperconomy.Shop;
-import regalowl.hyperconomy.ShopCreationListener;
+import regalowl.hyperconomy.event.ShopCreationListener;
+import regalowl.hyperconomy.shop.Shop;
 
 public class WebHandler implements ShopCreationListener {
 
 	private HyperConomy hc;
 	private HyperConomy_Web hcw;
+	private BukkitTask serverTask;
 	private BukkitTask updateTask;
 	private Server server;
 	private ServletContextHandler context;
@@ -34,7 +35,7 @@ public class WebHandler implements ShopCreationListener {
 
 	public void startServer() {
 		try {
-			hcw.getServer().getScheduler().runTaskAsynchronously(hcw, new Runnable() {
+			serverTask = hcw.getServer().getScheduler().runTaskAsynchronously(hcw, new Runnable() {
 				public void run() {
 					System.setProperty("org.eclipse.jetty.LEVEL", "WARN");
 					server = new Server(hcw.getPort());
@@ -42,13 +43,13 @@ public class WebHandler implements ShopCreationListener {
 					context.setContextPath("/");
 					server.setHandler(context);
 					if (hcw.useWebAPI()) {
-						context.addServlet(new ServletHolder(new HyperWebAPI()), "/"+hcw.getWebAPIPath()+"/*");
+						context.addServlet(new ServletHolder(new HyperWebAPI(hcw.getWebAPIPath())), "/"+hcw.getWebAPIPath()+"/*");
 					}
 					context.addServlet(new ServletHolder(new MainPage()), "/");
-					for (Shop s : hc.getEconomyManager().getShops()) {
+					for (Shop s : hc.getDataManager().getShops()) {
 						ShopPage sp = new ShopPage(s);
 						shopPages.add(sp);
-						context.addServlet(new ServletHolder(sp), "/" + s.getName() + "/*");
+						context.addServlet(new ServletHolder(sp), "/" + s.getName());
 					}
 					try {
 						server.start();
@@ -131,6 +132,9 @@ public class WebHandler implements ShopCreationListener {
 			} catch (Exception e) {
 				hcw.getDataBukkit().writeError(e);
 			}
+		}
+		if (serverTask != null) {
+			serverTask.cancel();
 		}
 	}
 	

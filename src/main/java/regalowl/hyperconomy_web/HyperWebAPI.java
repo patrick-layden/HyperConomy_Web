@@ -21,35 +21,26 @@ import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import regalowl.hyperconomy.HyperAPI;
-import regalowl.hyperconomy.HyperEconAPI;
-import regalowl.hyperconomy.HyperObjectAPI;
+import regalowl.hyperconomy.api.HyperAPI;
+import regalowl.hyperconomy.api.HyperEconAPI;
+
 
 
 public class HyperWebAPI extends HttpServlet {
 	
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1467231980254743516L;
-	/** Classes which must be called by the API */
 	private static Map<String, Class<?>> classes = new HashMap<String, Class<?>>();
 
-	/**
-	 * Constructor
-	 */
-	public HyperWebAPI() {
-		
-		//Add classes for the API
-		classes.put("HGeneral", HyperAPI.class);
-		classes.put("HEcon", HyperEconAPI.class);
-		classes.put("HObject", HyperObjectAPI.class);
+	private String apiKey;
+
+	public HyperWebAPI(String apiKey) {
+		this.apiKey = apiKey;
+		classes.put("Main", HyperAPI.class);
+		classes.put("Economy", HyperEconAPI.class);
 	}
 
-	/**
-	 * A request must be treated
-	 */
+
     public void doGet(HttpServletRequest pRequest, HttpServletResponse pResponse) throws IOException, ServletException {
         pResponse.setContentType("text/html;charset=utf-8");
         pResponse.setStatus(HttpServletResponse.SC_OK);
@@ -86,7 +77,7 @@ public class HyperWebAPI extends HttpServlet {
     	for (String lObj : lParts) {
     		if (lObj.trim().length() > 0) {
     			if (!lPassAPI) {
-    				if(lObj.trim().equals("API")) {
+    				if(lObj.trim().equals(apiKey)) {
     					lPassAPI = true;
     				}
     			} else {

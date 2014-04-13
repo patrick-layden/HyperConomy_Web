@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.bukkit.scheduler.BukkitTask;
 
 import regalowl.hyperconomy.HyperConomy;
-import regalowl.hyperconomy.Shop;
+import regalowl.hyperconomy.shop.Shop;
 
 public class MainPage extends HttpServlet {
 
@@ -55,7 +55,7 @@ public class MainPage extends HttpServlet {
     private String buildPage() {
 		
 		String page = "";
-			ArrayList<Shop> shops = HyperConomy.hc.getEconomyManager().getShops();
+			ArrayList<Shop> shops = HyperConomy.hc.getDataManager().getShops();
 			Collections.sort(shops);
 
 			page += "<html>\n";

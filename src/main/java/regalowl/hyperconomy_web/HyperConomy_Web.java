@@ -8,10 +8,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import regalowl.databukkit.DataBukkit;
-import regalowl.databukkit.YamlHandler;
-import regalowl.hyperconomy.DataLoadListener;
+import regalowl.databukkit.file.YamlHandler;
 import regalowl.hyperconomy.HyperConomy;
-import regalowl.hyperconomy.HyperEventHandler;
+import regalowl.hyperconomy.event.DataLoadListener;
+import regalowl.hyperconomy.event.HyperEventHandler;
 
 
 public class HyperConomy_Web extends JavaPlugin implements DataLoadListener {
@@ -91,8 +91,8 @@ public class HyperConomy_Web extends JavaPlugin implements DataLoadListener {
 			font = config.getString("font");
 			fontSize = config.getInt("font-size");
 			port = config.getInt("port");
-			webAPIPath = config.getString("enable-web-api");
-			useWebAPI = config.getBoolean("web-api-path");
+			webAPIPath = config.getString("web-api-path");
+			useWebAPI = config.getBoolean("enable-web-api");
 			if (wh == null) {
 				wh = new WebHandler();
 			}
