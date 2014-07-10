@@ -64,7 +64,7 @@ public class HyperConomy_Web extends JavaPlugin implements DataLoadListener {
 		hc = HyperConomy.hc;
 		log = Logger.getLogger("Minecraft");
 		heh = hc.getHyperEventHandler();
-		heh.registerDataLoadListener(this);
+		heh.registerListener(this);
 		registerCommands();
 		db = new DataBukkit(this);
 		yh = db.getYamlHandler();

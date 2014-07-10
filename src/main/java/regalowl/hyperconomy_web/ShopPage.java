@@ -283,7 +283,7 @@ public class ShopPage extends HttpServlet {
 
 			return page;
 		} catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			return "This page didn't load properly.  Please wait for it to reload.";
 		}
 	}

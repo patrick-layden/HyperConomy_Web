@@ -28,7 +28,7 @@ public class WebHandler implements ShopCreationListener {
 	WebHandler() {
 		hc = HyperConomy.hc;
 		hcw = HyperConomy_Web.hcw;
-		hc.getHyperEventHandler().registerShopCreationListener(this);
+		hc.getHyperEventHandler().registerListener(this);
 		serverStarted.set(false);
 	}
 	
