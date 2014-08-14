@@ -158,7 +158,7 @@ public class HyperWebAPI extends HttpServlet {
      * @throws InvocationTargetException InvocationTargetException
      * @throws IllegalArgumentException IllegalArgumentException
      */
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "deprecation" })
 	private String callMethod(String pClass, String pMethod, List<String> pParams) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
     	String lReturn = "";
 		

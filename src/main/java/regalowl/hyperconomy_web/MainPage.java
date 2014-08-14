@@ -55,7 +55,7 @@ public class MainPage extends HttpServlet {
     private String buildPage() {
 		
 		String page = "";
-			ArrayList<Shop> shops = HyperConomy.hc.getDataManager().getShops();
+			ArrayList<Shop> shops = HyperConomy.hc.getHyperShopManager().getShops();
 			Collections.sort(shops);
 
 			page += "<html>\n";
