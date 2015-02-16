@@ -21,8 +21,7 @@ import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import regalowl.hyperconomy.api.HyperAPI;
-import regalowl.hyperconomy.api.HyperEconAPI;
+import regalowl.hyperconomy.api.API;
 
 
 
@@ -36,8 +35,7 @@ public class HyperWebAPI extends HttpServlet {
 
 	public HyperWebAPI(String apiKey) {
 		this.apiKey = apiKey;
-		classes.put("Main", HyperAPI.class);
-		classes.put("Economy", HyperEconAPI.class);
+		classes.put("Main", API.class);
 	}
 
 
@@ -158,7 +156,7 @@ public class HyperWebAPI extends HttpServlet {
      * @throws InvocationTargetException InvocationTargetException
      * @throws IllegalArgumentException IllegalArgumentException
      */
-    @SuppressWarnings({ "rawtypes", "deprecation" })
+	@SuppressWarnings("rawtypes")
 	private String callMethod(String pClass, String pMethod, List<String> pParams) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
     	String lReturn = "";
 		

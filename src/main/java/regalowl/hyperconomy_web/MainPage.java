@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.bukkit.scheduler.BukkitTask;
 
-import regalowl.hyperconomy.HyperConomy;
 import regalowl.hyperconomy.shop.Shop;
 
 public class MainPage extends HttpServlet {
@@ -22,8 +21,8 @@ public class MainPage extends HttpServlet {
 	private String page = "Loading...";
 	private BukkitTask updateTask;
 
-	public MainPage() {
-		hcw = HyperConomy_Web.hcw;
+	public MainPage(HyperConomy_Web hcweb) {
+		this.hcw = hcweb;
 		page = buildLoadPage();
 		
 		updateTask = hcw.getServer().getScheduler().runTaskTimerAsynchronously(hcw, new Runnable() {
@@ -31,7 +30,7 @@ public class MainPage extends HttpServlet {
 				try {
 					page = buildPage();
 				} catch (Exception e) {
-					hcw.getDataBukkit().writeError(e);
+					hcw.getSimpleDataLib().getErrorWriter().writeError(e);
 				}
 			}
 		}, 40L, 6000L);
@@ -55,7 +54,7 @@ public class MainPage extends HttpServlet {
     private String buildPage() {
 		
 		String page = "";
-			ArrayList<Shop> shops = HyperConomy.hc.getHyperShopManager().getShops();
+			ArrayList<Shop> shops = hcw.getHC().getHyperShopManager().getShops();
 			Collections.sort(shops);
 
 			page += "<html>\n";

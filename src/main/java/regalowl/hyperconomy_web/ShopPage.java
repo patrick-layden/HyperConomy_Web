@@ -10,14 +10,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import regalowl.databukkit.CommonFunctions;
+import regalowl.simpledatalib.CommonFunctions;
 import regalowl.hyperconomy.HyperConomy;
-import regalowl.hyperconomy.hyperobject.EnchantmentClass;
-import regalowl.hyperconomy.hyperobject.HyperObject;
-import regalowl.hyperconomy.hyperobject.HyperObjectStatus;
-import regalowl.hyperconomy.hyperobject.HyperObjectType;
 import regalowl.hyperconomy.shop.PlayerShop;
 import regalowl.hyperconomy.shop.Shop;
+import regalowl.hyperconomy.tradeobject.EnchantmentClass;
+import regalowl.hyperconomy.tradeobject.TradeObject;
+import regalowl.hyperconomy.tradeobject.TradeObjectStatus;
+import regalowl.hyperconomy.tradeobject.TradeObjectType;
 import regalowl.hyperconomy.util.History;
 
 
@@ -26,15 +26,13 @@ public class ShopPage extends HttpServlet {
 	private static final long serialVersionUID = 699465359999143309L;
 	private HyperConomy_Web hcw;
 	private HyperConomy hc;
-	private CommonFunctions cf;
 	private History hist;
 	private Shop s;
 	private String page = "Loading...";
 
-	public ShopPage(Shop shop) {
-		hcw = HyperConomy_Web.hcw;
-		hc = HyperConomy.hc;
-		cf = hcw.getDataBukkit().getCommonFunctions();
+	public ShopPage(Shop shop, HyperConomy_Web hcw) {
+		this.hcw = hcw;
+		hc = hcw.getHC();
 		hist = hc.getHistory();
 		s = shop;
 		page = buildLoadPage();
@@ -68,14 +66,14 @@ public class ShopPage extends HttpServlet {
 			if (ps != null) {
 				useHistory = false;
 			}
-			ArrayList<HyperObject> objects = s.getTradeableObjects();
+			ArrayList<TradeObject> objects = s.getTradeableObjects();
 			Collections.sort(objects);
 
-			HashMap<HyperObject, String> hour = null;
-			HashMap<HyperObject, String> sixHours = null;
-			HashMap<HyperObject, String> day = null;
-			HashMap<HyperObject, String> threeDay = null;
-			HashMap<HyperObject, String> week = null;
+			HashMap<TradeObject, String> hour = null;
+			HashMap<TradeObject, String> sixHours = null;
+			HashMap<TradeObject, String> day = null;
+			HashMap<TradeObject, String> threeDay = null;
+			HashMap<TradeObject, String> week = null;
 			if (useHistory) {
 				hour = hist.getPercentChange(economy, 1);
 				sixHours = hist.getPercentChange(economy, 6);
@@ -140,11 +138,11 @@ public class ShopPage extends HttpServlet {
 			}
 			page += "</TR>\n";
 
-			for (HyperObject ho : objects) {
-				HyperObjectStatus hos = null;
+			for (TradeObject ho : objects) {
+				TradeObjectStatus hos = null;
 				if (ho.isShopObject()) {
-					hos = ho.getStatus();
-					if (hos == HyperObjectStatus.NONE) {
+					hos = ho.getShopObjectStatus();
+					if (hos == TradeObjectStatus.NONE) {
 						continue;
 					}
 				}
@@ -156,32 +154,32 @@ public class ShopPage extends HttpServlet {
 				double buyPrice = -1;
 				String buyString = "";
 				String sellString = "";
-				if (ho.getType() == HyperObjectType.ITEM) {
+				if (ho.getType() == TradeObjectType.ITEM) {
 					sellPrice = ho.getSellPrice(1);
 					sellPrice -= ho.getSalesTaxEstimate(sellPrice);
 					buyPrice = ho.getBuyPrice(1);
 					buyPrice += ho.getPurchaseTax(buyPrice);
-					buyString = hc.getLanguageFile().fC(cf.twoDecimals(buyPrice));
-					sellString = hc.getLanguageFile().fC(cf.twoDecimals(sellPrice));
-				} else if (ho.getType() == HyperObjectType.ENCHANTMENT) {
+					buyString = hc.getLanguageFile().fC(CommonFunctions.twoDecimals(buyPrice));
+					sellString = hc.getLanguageFile().fC(CommonFunctions.twoDecimals(sellPrice));
+				} else if (ho.getType() == TradeObjectType.ENCHANTMENT) {
 					sellPrice = ho.getSellPrice(EnchantmentClass.DIAMOND);
 					sellPrice -= ho.getSalesTaxEstimate(sellPrice);
 					buyPrice = ho.getBuyPrice(EnchantmentClass.DIAMOND);
 					buyPrice += ho.getPurchaseTax(buyPrice);
-					buyString = hc.getLanguageFile().fC(cf.twoDecimals(buyPrice));
-					sellString = hc.getLanguageFile().fC(cf.twoDecimals(sellPrice));
-				} else if (ho.getType() == HyperObjectType.EXPERIENCE) {
+					buyString = hc.getLanguageFile().fC(CommonFunctions.twoDecimals(buyPrice));
+					sellString = hc.getLanguageFile().fC(CommonFunctions.twoDecimals(sellPrice));
+				} else if (ho.getType() == TradeObjectType.EXPERIENCE) {
 					sellPrice = ho.getSellPrice(1);
 					sellPrice -= ho.getSalesTaxEstimate(sellPrice);
 					buyPrice = ho.getBuyPrice(1);
 					buyPrice += ho.getPurchaseTax(buyPrice);
-					buyString = hc.getLanguageFile().fC(cf.twoDecimals(buyPrice));
-					sellString = hc.getLanguageFile().fC(cf.twoDecimals(sellPrice));
+					buyString = hc.getLanguageFile().fC(CommonFunctions.twoDecimals(buyPrice));
+					sellString = hc.getLanguageFile().fC(CommonFunctions.twoDecimals(sellPrice));
 				}
 				if (hos != null) {
-					if (hos == HyperObjectStatus.BUY) {
+					if (hos == TradeObjectStatus.BUY) {
 						sellString = "N/A";
-					} else if (hos == HyperObjectStatus.SELL) {
+					} else if (hos == TradeObjectStatus.SELL) {
 						buyString = "N/A";
 					}
 				}
@@ -196,13 +194,13 @@ public class ShopPage extends HttpServlet {
 				page += buyString + "\n";
 				page += "</TD>\n";
 				page += "<TD>\n";
-				page += cf.twoDecimals(ho.getStock()) + "\n";
+				page += CommonFunctions.twoDecimals(ho.getStock()) + "\n";
 				page += "</TD>\n";
 				page += "<TD>\n";
 
 				String material = "N/A";
-				if (ho.getType() == HyperObjectType.ITEM) {
-					material = ho.getItemStack().getType().toString();
+				if (ho.getType() == TradeObjectType.ITEM) {
+					material = ho.getItemStack(1).getMaterial();
 				}
 
 				page += material + "\n";

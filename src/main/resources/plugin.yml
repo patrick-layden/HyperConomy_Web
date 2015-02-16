@@ -1,6 +1,6 @@
 name: HyperConomy_Web
 main: regalowl.hyperconomy_web.HyperConomy_Web
-version: 0.0.7
+version: 0.0.8
 author: RegalOwl
 depend: [HyperConomy]
 commands:

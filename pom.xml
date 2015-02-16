@@ -2,13 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>regalowl.hyperconomy_web</groupId>
   <artifactId>hyperconomy_web</artifactId>
-  <version>0.0.7-SNAPSHOT</version>
+  <version>0.0.8-SNAPSHOT</version>
   <name>HyperConomy_Web</name>
   <description>Creates a web page which displays information about all HyperConomy shops.</description>
   	<repositories>
 		<repository>
-			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public</url>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
 		</repository>
     	<repository>
 			<id>regalowl-repo</id>
@@ -17,9 +17,9 @@
 	</repositories>
 		<dependencies>
 		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.7.10-R0.1-SNAPSHOT</version>
+          	<groupId>org.spigotmc</groupId>
+         	<artifactId>spigot-api</artifactId>
+         	<version>1.8-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -61,13 +61,13 @@
 		<dependency>
 			<groupId>regalowl.hyperconomy</groupId>
 			<artifactId>hyperconomy</artifactId>
-			<version>0.974.56-SNAPSHOT</version>
+			<version>0.975.3-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>regalowl.databukkit</groupId>
-			<artifactId>databukkit</artifactId>
-			<version>0.0.64-SNAPSHOT</version>
+			<groupId>regalowl.simpledatalib</groupId>
+			<artifactId>simpledatalib</artifactId>
+			<version>0.1.076-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>

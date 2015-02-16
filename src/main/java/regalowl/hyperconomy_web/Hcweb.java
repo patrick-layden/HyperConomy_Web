@@ -10,9 +10,16 @@ import regalowl.hyperconomy.HyperConomy;
 import regalowl.hyperconomy.util.LanguageFile;
 
 public class Hcweb implements CommandExecutor{
+	
+	private HyperConomy_Web hcw;
+	
+	public Hcweb(HyperConomy_Web hcw) {
+		this.hcw = hcw;
+	}
+	
+	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		HyperConomy hc = HyperConomy.hc;
-		HyperConomy_Web hcw = HyperConomy_Web.hcw;
+		HyperConomy hc = hcw.getHC();
 		LanguageFile L = hc.getLanguageFile();
 		WebHandler wh = hcw.getWebHandler();
 		try {
@@ -89,7 +96,7 @@ public class Hcweb implements CommandExecutor{
 				hcw.restart();
 	    		sender.sendMessage(L.get("WEB_PAGE_SET"));
 			} else if (args[0].equalsIgnoreCase("status")) {
-				if (wh.getServer() == null) {
+				if (wh == null || wh.getServer() == null) {
 					sender.sendMessage(L.get("SERVER_NULL"));
 				} else if (wh.getServer().isStopping()) {
 					sender.sendMessage(L.get("SERVER_STOPPING"));
@@ -107,7 +114,7 @@ public class Hcweb implements CommandExecutor{
 			}
 			return true;
 		} catch (Exception e) {
-			hcw.getDataBukkit().writeError(e);
+			hcw.getSimpleDataLib().getErrorWriter().writeError(e);
 			sender.sendMessage(L.get("HCWEB_INVALID"));
 			return true;
 		}

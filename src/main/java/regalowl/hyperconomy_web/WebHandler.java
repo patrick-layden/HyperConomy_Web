@@ -10,10 +10,10 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import regalowl.hyperconomy.HyperConomy;
-import regalowl.hyperconomy.event.ShopCreationListener;
 import regalowl.hyperconomy.shop.Shop;
+import regalowl.simpledatalib.event.EventHandler;
 
-public class WebHandler implements ShopCreationListener {
+public class WebHandler {
 
 	private HyperConomy hc;
 	private HyperConomy_Web hcw;
@@ -25,12 +25,19 @@ public class WebHandler implements ShopCreationListener {
 	private Shop s;
 	private AtomicBoolean serverStarted = new AtomicBoolean();
 
-	WebHandler() {
-		hc = HyperConomy.hc;
-		hcw = HyperConomy_Web.hcw;
+	WebHandler(HyperConomy_Web hcw) {
+		this.hcw = hcw;
+		hc = hcw.getHC();
 		hc.getHyperEventHandler().registerListener(this);
 		serverStarted.set(false);
 	}
+	
+	@EventHandler
+	public void onShopCreation(Shop s) {
+		addShop(s);
+	}
+	
+	
 	
 
 	public void startServer() {
@@ -45,9 +52,9 @@ public class WebHandler implements ShopCreationListener {
 					if (hcw.useWebAPI()) {
 						context.addServlet(new ServletHolder(new HyperWebAPI(hcw.getWebAPIPath())), "/"+hcw.getWebAPIPath()+"/*");
 					}
-					context.addServlet(new ServletHolder(new MainPage()), "/");
+					context.addServlet(new ServletHolder(new MainPage(hcw)), "/");
 					for (Shop s : hc.getHyperShopManager().getShops()) {
-						ShopPage sp = new ShopPage(s);
+						ShopPage sp = new ShopPage(s, hcw);
 						shopPages.add(sp);
 						context.addServlet(new ServletHolder(sp), "/" + s.getName());
 					}
@@ -55,7 +62,7 @@ public class WebHandler implements ShopCreationListener {
 						server.start();
 						server.join();
 					} catch (Exception e) {
-						hcw.getDataBukkit().writeError(e);
+						hcw.getSimpleDataLib().getErrorWriter().writeError(e);
 					}
 					serverStarted.set(true);
 				}
@@ -67,13 +74,13 @@ public class WebHandler implements ShopCreationListener {
 							sp.updatePage();
 						}
 					} catch (Exception e) {
-						hcw.getDataBukkit().writeError(e);
+						hcw.getSimpleDataLib().getErrorWriter().writeError(e);
 					}
 				}
 			}, 400L, 6000L);
 			hcw.getLog().info("[HyperConomy_Web]Web server enabled.  Running on port " + hcw.getPort() + ".");
 		} catch (Exception e) {
-			hcw.getDataBukkit().writeError(e);;
+			hcw.getSimpleDataLib().getErrorWriter().writeError(e);;
 		}
 	}
 	
@@ -86,21 +93,18 @@ public class WebHandler implements ShopCreationListener {
 						sp.updatePage();
 					}
 				} catch (Exception e) {
-					hcw.getDataBukkit().writeError(e);
+					hcw.getSimpleDataLib().getErrorWriter().writeError(e);
 				}
 			}
 		});
 	}
-	
-	public void onShopCreation(Shop s) {
-		addShop(s);
-	}
+
 	
 	public void addShop(Shop shop) {
 		s = shop;
 		hcw.getServer().getScheduler().runTaskAsynchronously(hcw, new Runnable() {
 			public void run() {
-				ShopPage sp = new ShopPage(s);
+				ShopPage sp = new ShopPage(s, hcw);
 				shopPages.add(sp);
 				context.addServlet(new ServletHolder(sp), "/" + s.getName() + "/*");
 			}
@@ -117,20 +121,20 @@ public class WebHandler implements ShopCreationListener {
 			try {
 				context.stop();
 				if (!context.isStopped()) {
-					hcw.getDataBukkit().writeError("Context failed to stop.");
+					hcw.getSimpleDataLib().getErrorWriter().writeError("Context failed to stop.");
 				}
 			} catch (Exception e) {
-				hcw.getDataBukkit().writeError(e);
+				hcw.getSimpleDataLib().getErrorWriter().writeError(e);
 			}
 		}
 		if (server != null) {
 			try {
 				server.stop();
 				if (!server.isStopped()) {
-					hcw.getDataBukkit().writeError("Server failed to stop.");
+					hcw.getSimpleDataLib().getErrorWriter().writeError("Server failed to stop.");
 				}
 			} catch (Exception e) {
-				hcw.getDataBukkit().writeError(e);
+				hcw.getSimpleDataLib().getErrorWriter().writeError(e);
 			}
 		}
 		if (serverTask != null) {
