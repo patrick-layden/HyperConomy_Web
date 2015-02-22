@@ -55,6 +55,7 @@ public class ShopPage extends HttpServlet {
 	private String buildPage(String economy) {
 		try {
 			String page = "";
+			if (!hc.enabled()) return page;
 			if (s == null) {
 				return "";
 			}
